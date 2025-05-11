@@ -34,13 +34,10 @@ function displayVerse(bookArr) {
   document.getElementById("verse").textContent = `"${v.verse}"`;
   document.getElementById("ref").textContent = v.ref;
   document.getElementById("verse-content").style.display = "block";
-
-  // 👇 Hide the selection buttons
   document.getElementById("book-select").style.display = "none";
-
-  // 👇 Set a new background
   setRandomGradient();
 }
+
 
 
 function loadVerse(book) {
