@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper mobile scaling -->
     <title>Verse of the Day</title>
     <style>
         body {
@@ -21,6 +20,7 @@
         }
         .verse-box {
             max-width: 600px;
+            width: 90%;
             padding: 2rem;
             border-radius: 1rem;
             background-color: rgba(255, 255, 255, 0.8);
@@ -52,34 +52,29 @@
     </div>
 
     <script>
-       const verses = {verse_of_day_42};
+        const verses = [
+            ["John 3:16", "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."],
+            ["John 4:24", "God is spirit, and his worshipers must worship in the Spirit and in truth."],
+            ["John 15:5", "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing."]
+        ];
 
-function getTimeSlot() {
-    const hour = new Date().getHours();
-    if (hour < 12) return 0;
-    if (hour < 17) return 1;
-    return 2;
-}
+        function getVerseIndex() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const day = Math.floor(diff / oneDay);
+            return day % verses.length;
+        }
 
-function getVerseIndex() {
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = now - start;
-    const oneDay = 1000 * 60 * 60 * 24;
-    const day = Math.floor(diff / oneDay);
-    const slot = getTimeSlot();
-    return (day * 3 + slot) % verses.length;
-}
+        const index = getVerseIndex();
+        const verse = verses[index];
 
-const index = getVerseIndex();
-const verse = verses[index];
-
-// Delay the verse text injection for proper animation
-setTimeout(() => {
-    document.getElementById("verse-text").textContent = verse[1];
-    document.getElementById("verse-ref").textContent = verse[0];
-}, 100);  // Delay of 100ms for smoother animation
-
+        // Delay the verse text injection for proper animation
+        setTimeout(() => {
+            document.getElementById("verse-text").textContent = verse[1];
+            document.getElementById("verse-ref").textContent = verse[0];
+        }, 100);  // 100ms delay
     </script>
 </body>
 </html>
