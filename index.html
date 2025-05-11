@@ -13,10 +13,10 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient colors */
             color: white;
             text-align: center;
             overflow: hidden;
+            transition: background 2s ease; /* Smooth transition for background */
         }
         .verse-box {
             max-width: 600px;
@@ -61,6 +61,7 @@
 <body>
     <div class="verse-box">
         <div>
+            <button id="verseOfTheDayButton">Verse of the Day</button>
             <button id="johnButton">John</button>
             <button id="matthewButton">Matthew</button>
         </div>
@@ -108,17 +109,43 @@
             document.getElementById("verse-ref").textContent = verse[0];
         }
 
+        // Function to generate a random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Function to set random gradient background
+        function setRandomGradient() {
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            document.body.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+        }
+
         // Default load (starts with John)
         loadVerse(versesJohn);
+        setRandomGradient(); // Set random gradient on initial load
 
         // Switch to John (Book Mode)
         document.getElementById("johnButton").addEventListener("click", () => {
             loadVerse(versesJohn);
+            setRandomGradient(); // Set random gradient on book change
         });
 
         // Switch to Matthew (Book Mode)
         document.getElementById("matthewButton").addEventListener("click", () => {
             loadVerse(versesMatthew);
+            setRandomGradient(); // Set random gradient on book change
+        });
+
+        // Switch to Verse of the Day mode
+        document.getElementById("verseOfTheDayButton").addEventListener("click", () => {
+            loadVerse(versesJohn);  // Show verse of the day from John (could randomize it for more flexibility)
+            setRandomGradient(); // Set random gradient for Verse of the Day
         });
     </script>
 </body>
