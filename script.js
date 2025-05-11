@@ -41,7 +41,6 @@ const verses = [
   }
 ];
 
-// A handful of soft, minimalist gradients
 const gradients = [
   "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)",
   "linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)",
@@ -51,11 +50,9 @@ const gradients = [
   "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)"
 ];
 
-// Pick one verse and one gradient at random
 const v = verses[Math.floor(Math.random() * verses.length)];
 const g = gradients[Math.floor(Math.random() * gradients.length)];
 
-// Apply them
 document.body.style.background = g;
 document.getElementById('verse').textContent = v.text;
 document.getElementById('ref').textContent = `– ${v.reference}`;
