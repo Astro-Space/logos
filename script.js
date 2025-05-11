@@ -12,8 +12,30 @@ const matthew = [
   // Add more verses as needed
 ];
 
+// Verse of the Day logic
+window.onload = function() {
+  loadVerseOfTheDay();
+}
+
+function loadVerseOfTheDay() {
+  const verseOfTheDay = getVerseOfTheDay();
+  document.getElementById("verse").textContent = `"${verseOfTheDay.verse}"`;
+  document.getElementById("ref").textContent = verseOfTheDay.ref;
+  document.getElementById("verse-content").style.display = "block";
+}
+
+function getVerseOfTheDay() {
+  // You can decide on the logic to pull a verse here, could be random or based on date
+  const verses = [
+    { verse: "This is the verse of the day, start your journey.", ref: "John 1:1" }
+  ];
+  return verses[0]; // For now, just one verse will be shown on the load
+}
+
 function loadVerse(book) {
-  document.getElementById("header").textContent = ""; // Clear Verse of the Day header
+  document.getElementById("header").textContent = ""; // Clear the Verse of the Day header once a book is selected
+  document.getElementById("verse-content").style.display = "none"; // Hide verse content until a book is selected
+  document.getElementById("book-select").style.display = "none"; // Hide buttons after selection
   if (book === "john") {
     displayVerse(john);
   } else if (book === "matthew") {
@@ -27,7 +49,6 @@ function displayVerse(bookArr) {
   document.getElementById("verse").textContent = `"${v.verse}"`;
   document.getElementById("ref").textContent = v.ref;
   document.getElementById("verse-content").style.display = "block";
-  document.getElementById("book-select").style.display = "none"; // Hide buttons after selection
   setRandomGradient();
 }
 
