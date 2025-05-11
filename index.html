@@ -16,6 +16,7 @@
             background: linear-gradient(to right, #f9fafb, #e5e7eb);
             color: #111827;
             text-align: center;
+            overflow: hidden;
         }
         .verse-box {
             max-width: 600px;
@@ -23,6 +24,15 @@
             border-radius: 1rem;
             background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .reference {
             margin-top: 1rem;
@@ -41,9 +51,9 @@
 
         function getTimeSlot() {
             const hour = new Date().getHours();
-            if (hour < 12) return 0;       // Morning
-            if (hour < 17) return 1;       // Afternoon
-            return 2;                      // Evening
+            if (hour < 12) return 0;
+            if (hour < 17) return 1;
+            return 2;
         }
 
         function getVerseIndex() {
