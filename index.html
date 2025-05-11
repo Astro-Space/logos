@@ -1,152 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verse of the Day</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-            text-align: center;
-            overflow: hidden;
-            transition: background 2s ease; /* Smooth transition for background */
-        }
-        .verse-box {
-            max-width: 600px;
-            width: 90%;
-            padding: 2rem;
-            border-radius: 1rem;
-            background-color: rgba(0, 0, 0, 0.7); /* Slight transparency for modern look */
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        .verse-text, .reference {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease-out forwards;
-        }
-        .verse-text {
-            animation-delay: 0.2s;
-        }
-        .reference {
-            animation-delay: 0.6s;
-        }
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verse of the Day</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: #f4f4f4;
+      transition: background 0.5s ease;
+    }
+    #container {
+      max-width: 600px;
+      text-align: center;
+      background: rgba(255,255,255,0.85);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #verse {
+      font-size: 1.2rem;
+      color: #222;
+    }
+    #ref {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #555;
+    }
+    #book-select button {
+      padding: 0.6rem 1.2rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      background: #333;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #book-select button:hover {
+      background: #555;
+    }
+  </style>
 </head>
 <body>
-    <div class="verse-box">
-        <div>
-            <button id="verseOfTheDayButton">Verse of the Day</button>
-            <button id="johnButton">John</button>
-            <button id="matthewButton">Matthew</button>
-        </div>
-        <div class="verse-text" id="verse-text"></div>
-        <div class="reference" id="verse-ref"></div>
+  <div id="container">
+    <div id="book-select">
+      <p>Select a book:</p>
+      <button onclick="loadVerse('john')">John</button>
+      <button onclick="loadVerse('matthew')">Matthew</button>
     </div>
+    <div id="verse-content" style="display:none;">
+      <div id="verse">Loading...</div>
+      <div id="ref"></div>
+    </div>
+  </div>
 
-    <script>
-        const versesJohn = [
-            ["John 3:16", "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."],
-            ["John 4:24", "God is spirit, and his worshipers must worship in the Spirit and in truth."],
-            ["John 15:5", "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing."]
-        ];
+  <script>
+    const versesJohn = [
+      ["John 3:16", "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."],
+      ["John 4:24", "God is spirit, and his worshipers must worship in the Spirit and in truth."],
+      ["John 15:5", "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing."]
+    ];
 
-        const versesMatthew = [
-            ["Matthew 5:3", "Blessed are the poor in spirit, for theirs is the kingdom of heaven."],
-            ["Matthew 6:9", "This, then, is how you should pray: 'Our Father in heaven, hallowed be your name.'"],
-            ["Matthew 28:19", "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."]
-        ];
+    const versesMatthew = [
+      ["Matthew 5:3", "Blessed are the poor in spirit, for theirs is the kingdom of heaven."],
+      ["Matthew 6:9", "This, then, is how you should pray: 'Our Father in heaven, hallowed be your name.'"],
+      ["Matthew 28:19", "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."]
+    ];
 
-        // Get the current time of day (Morning, Afternoon, Evening)
-        function getTimeSlot() {
-            const hour = new Date().getHours();
-            if (hour < 12) return 0;  // Morning
-            if (hour < 17) return 1;  // Afternoon
-            return 2;  // Evening
-        }
+    // Random color generator for gradient
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
 
-        // Get the verse index based on the current date and time of day
-        function getVerseIndex(book) {
-            const now = new Date();
-            const start = new Date(now.getFullYear(), 0, 0);
-            const diff = now - start;
-            const oneDay = 1000 * 60 * 60 * 24;
-            const day = Math.floor(diff / oneDay);
-            const slot = getTimeSlot();
-            return (day * 3 + slot) % book.length;
-        }
+    // Apply random gradient to the body background
+    function setRandomGradient() {
+      const color1 = getRandomColor();
+      const color2 = getRandomColor();
+      document.body.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+    }
 
-        // Load a random verse based on the selected book and time of day
-        function loadVerse(book) {
-            const index = getVerseIndex(book);
-            const verse = book[index];
-            document.getElementById("verse-text").textContent = verse[1];
-            document.getElementById("verse-ref").textContent = verse[0];
-        }
-
-        // Function to generate a random color
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        // Function to set random gradient background
-        function setRandomGradient() {
-            const color1 = getRandomColor();
-            const color2 = getRandomColor();
-            document.body.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-        }
-
-        // Default load (starts with John)
-        loadVerse(versesJohn);
-        setRandomGradient(); // Set random gradient on initial load
-
-        // Switch to John (Book Mode)
-        document.getElementById("johnButton").addEventListener("click", () => {
-            loadVerse(versesJohn);
-            setRandomGradient(); // Set random gradient on book change
-        });
-
-        // Switch to Matthew (Book Mode)
-        document.getElementById("matthewButton").addEventListener("click", () => {
-            loadVerse(versesMatthew);
-            setRandomGradient(); // Set random gradient on book change
-        });
-
-        // Switch to Verse of the Day mode
-        document.getElementById("verseOfTheDayButton").addEventListener("click", () => {
-            loadVerse(versesJohn);  // Show verse of the day from John (could randomize it for more flexibility)
-            setRandomGradient(); // Set random gradient for Verse of the Day
-        });
-    </script>
+    // Function to load random verse
+    function loadVerse(book) {
+      let verse;
+      if (book === 'john') {
+        verse = versesJohn[Math.floor(Math.random() * versesJohn.length)];
+      } else {
+        verse = versesMatthew[Math.floor(Math.random() * versesMatthew.length)];
+      }
+      document.getElementById('verse').textContent = verse[1];
+      document.getElementById('ref').textContent = verse[0];
+      document.getElementById('verse-content').style.display = 'block';
+      setRandomGradient(); // Change background on verse load
+    }
+  </script>
 </body>
 </html>
