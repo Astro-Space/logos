@@ -1,68 +1,65 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Verse of the Day</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-    }
-    body {
-      font-family: sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      background: #f4f4f4;
-      transition: background 0.5s ease;
-    }
-    #container {
-      max-width: 600px;
-      text-align: center;
-      background: rgba(255,255,255,0.85);
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    #verse {
-      font-size: 1.2rem;
-      color: #222;
-    }
-    #ref {
-      margin-top: 1rem;
-      font-weight: bold;
-      color: #555;
-    }
-    #book-select button {
-      padding: 0.6rem 1.2rem;
-      margin: 0.5rem;
-      border: none;
-      border-radius: 5px;
-      background: #333;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    #book-select button:hover {
-      background: #555;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Verse of the Day</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #f9fafb, #e5e7eb);
+            color: #111827;
+            text-align: center;
+        }
+        .verse-box {
+            max-width: 600px;
+            padding: 2rem;
+            border-radius: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .reference {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div id="container">
-    <div id="book-select">
-      <p>Select a source:</p>
-      <button onclick="loadVerse('john')">John</button>
-      <button onclick="loadVerse('matthew')">Matthew</button>
-      <button onclick="loadVerseOfTheDay()">Verse of the Day</button>
+    <div class="verse-box">
+        <div id="verse-text"></div>
+        <div class="reference" id="verse-ref"></div>
     </div>
-    <div id="verse-content" style="display:none;">
-      <div id="verse">Loading...</div>
-      <div id="ref"></div>
-    </div>
-  </div>
-  <script src="script.js"></script>
+
+    <script>
+        const verses = [('Matthew 5:16', 'Let your light shine before others, that they may see your good deeds.'), ('Matthew 23:12', 'Those who exalt themselves will be humbled.'), ('Matthew 25:40', "'Whatever you did for one of the least of these, you did for me.'"), ('Matthew 5:14', 'You are the light of the world. A town built on a hill cannot be hidden.'), ('John 13:34', "'A new command I give you: Love one another.'"), ('John 7:38', "'Whoever believes in me, rivers of living water will flow from within them.'"), ('John 4:24', 'God is spirit, and his worshipers must worship in the Spirit and in truth.'), ('John 12:46', "'I have come into the world as a light.'"), ('John 17:3', "'Now this is eternal life: that they know you, the only true God, and Jesus Christ.'"), ('John 1:1', 'In the beginning was the Word, and the Word was with God, and the Word was God.'), ('Matthew 22:37', 'Love the Lord your God with all your heart and with all your soul.'), ('Matthew 11:28', 'Come to me, all you who are weary and burdened, and I will give you rest.'), ('Matthew 18:20', 'Where two or three gather in my name, there am I with them.'), ('John 20:29', "'Blessed are those who have not seen and yet have believed.'"), ('John 16:33', "'In this world you will have trouble. But take heart! I have overcome the world.'"), ('John 6:35', "Then Jesus declared, 'I am the bread of life.'"), ('Matthew 4:4', "'Man shall not live on bread alone, but on every word that comes from the mouth of God.'"), ('John 17:17', 'Sanctify them by the truth; your word is truth.'), ('Matthew 6:33', 'But seek first his kingdom and his righteousness.'), ('John 15:5', "'I am the vine; you are the branches.'"), ('Matthew 7:7', 'Ask and it will be given to you; seek and you will find.'), ('Matthew 10:32', 'Whoever acknowledges me before others, I will also acknowledge before my Father.'), ('Matthew 7:12', 'So in everything, do to others what you would have them do to you.'), ('John 11:25', "'I am the resurrection and the life.'"), ('Matthew 6:34', 'Do not worry about tomorrow, for tomorrow will worry about itself.'), ('Matthew 20:26', 'Whoever wants to become great among you must be your servant.'), ('Matthew 5:9', 'Blessed are the peacemakers, for they will be called children of God.'), ('John 8:12', "'I am the light of the world. Whoever follows me will never walk in darkness.'"), ('Matthew 19:26', 'With God all things are possible.'), ('Matthew 28:19', 'Go and make disciples of all nations.'), ('Matthew 16:24', "'Whoever wants to be my disciple must deny themselves and take up their cross and follow me.'"), ('John 1:14', 'The Word became flesh and made his dwelling among us.'), ('John 5:24', "'Whoever hears my word and believes him who sent me has eternal life.'"), ('John 10:10', "'I have come that they may have life, and have it to the full.'"), ('John 14:27', "'Peace I leave with you; my peace I give you.'"), ('Matthew 13:43', 'Then the righteous will shine like the sun in the kingdom of their Father.'), ('John 14:6', "'I am the way and the truth and the life.'"), ('Matthew 24:35', 'Heaven and earth will pass away, but my words will never pass away.'), ('John 10:11', "'I am the good shepherd. The good shepherd lays down his life for the sheep.'"), ('Matthew 6:10', 'Your kingdom come, your will be done, on earth as it is in heaven.'), ('John 3:16', 'For God so loved the world that he gave his one and only Son.'), ('John 8:31', "'If you hold to my teaching, you are really my disciples.'")];
+
+        function getTimeSlot() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 0;       // Morning
+            if (hour < 17) return 1;       // Afternoon
+            return 2;                      // Evening
+        }
+
+        function getVerseIndex() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const day = Math.floor(diff / oneDay);
+            const slot = getTimeSlot();
+            return (day * 3 + slot) % verses.length;
+        }
+
+        const index = getVerseIndex();
+        const verse = verses[index];
+        document.getElementById("verse-text").textContent = verse[1];
+        document.getElementById("verse-ref").textContent = verse[0];
+    </script>
 </body>
 </html>
