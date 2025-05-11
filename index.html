@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verse of the Day</title>
     <style>
         body {
@@ -43,38 +43,95 @@
                 transform: translateY(0);
             }
         }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
     <div class="verse-box">
+        <div>
+            <button id="verseOfTheDayButton">Verse of the Day</button>
+            <button id="johnButton">John</button>
+            <button id="matthewButton">Matthew</button>
+        </div>
         <div class="verse-text" id="verse-text"></div>
         <div class="reference" id="verse-ref"></div>
     </div>
 
     <script>
-        const verses = [
+        const versesJohn = [
             ["John 3:16", "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."],
             ["John 4:24", "God is spirit, and his worshipers must worship in the Spirit and in truth."],
             ["John 15:5", "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing."]
         ];
 
-        function getVerseIndex() {
+        const versesMatthew = [
+            ["Matthew 5:3", "Blessed are the poor in spirit, for theirs is the kingdom of heaven."],
+            ["Matthew 6:9", "This, then, is how you should pray: 'Our Father in heaven, hallowed be your name.'"],
+            ["Matthew 28:19", "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."]
+        ];
+
+        // Get the current time of day (Morning, Afternoon, Evening)
+        function getTimeSlot() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 0;  // Morning
+            if (hour < 17) return 1;  // Afternoon
+            return 2;  // Evening
+        }
+
+        // Get the verse index based on the current date and time of day
+        function getVerseIndex(book) {
             const now = new Date();
             const start = new Date(now.getFullYear(), 0, 0);
             const diff = now - start;
             const oneDay = 1000 * 60 * 60 * 24;
             const day = Math.floor(diff / oneDay);
-            return day % verses.length;
+            const slot = getTimeSlot();
+            return (day * 3 + slot) % book.length;
         }
 
-        const index = getVerseIndex();
-        const verse = verses[index];
+        // Load a random verse based on the selected book and time of day
+        function loadVerse(book) {
+            const index = getVerseIndex(book);
+            const verse = book[index];
+            setTimeout(() => {
+                document.getElementById("verse-text").textContent = verse[1];
+                document.getElementById("verse-ref").textContent = verse[0];
+            }, 100);
+        }
 
-        // Delay the verse text injection for proper animation
-        setTimeout(() => {
-            document.getElementById("verse-text").textContent = verse[1];
-            document.getElementById("verse-ref").textContent = verse[0];
-        }, 100);  // 100ms delay
+        // Default load (Verse of the Day Mode, starts with John)
+        let currentMode = 'verseOfTheDay'; // Default to Verse of the Day mode
+        loadVerse(versesJohn);
+
+        // Toggle between Verse of the Day mode and Book Mode
+        document.getElementById("verseOfTheDayButton").addEventListener("click", () => {
+            currentMode = 'verseOfTheDay';
+            loadVerse(versesJohn); // Default to John for Verse of the Day mode
+        });
+
+        // Switch to John (Book Mode)
+        document.getElementById("johnButton").addEventListener("click", () => {
+            currentMode = 'bookMode';
+            loadVerse(versesJohn);
+        });
+
+        // Switch to Matthew (Book Mode)
+        document.getElementById("matthewButton").addEventListener("click", () => {
+            currentMode = 'bookMode';
+            loadVerse(versesMatthew);
+        });
     </script>
 </body>
 </html>
