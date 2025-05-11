@@ -2,25 +2,22 @@ const john = [
   { verse: "In the beginning was the Word...", ref: "John 1:1" },
   { verse: "For God so loved the world...", ref: "John 3:16" },
   { verse: "I am the way and the truth and the life...", ref: "John 14:6" },
-  // add more...
 ];
 
 const matthew = [
   { verse: "Blessed are the meek...", ref: "Matthew 5:5" },
   { verse: "Come to me, all you who are weary...", ref: "Matthew 11:28" },
   { verse: "Go and make disciples of all nations...", ref: "Matthew 28:19" },
-  // add more...
 ];
 
-// Choose a consistent index based on date and time block
 function getVerseIndex(arr) {
   const now = new Date();
-  const day = now.toISOString().split('T')[0]; // YYYY-MM-DD
+  const day = now.toISOString().split('T')[0];
   const hour = now.getHours();
   let block = 0;
-  if (hour >= 6 && hour < 12) block = 1;       // Morning
-  else if (hour >= 12 && hour < 18) block = 2; // Afternoon
-  else block = 3;                              // Evening
+  if (hour >= 6 && hour < 12) block = 1;
+  else if (hour >= 12 && hour < 18) block = 2;
+  else block = 3;
 
   const key = `${day}-${block}`;
   let hash = 0;
@@ -45,7 +42,6 @@ function loadVerse(book) {
   displayVerse(bookArr);
 }
 
-// Verse of the Day (alternates between both books)
 function loadVerseOfTheDay() {
   const allVerses = [...john, ...matthew];
   displayVerse(allVerses);
@@ -63,5 +59,7 @@ function setRandomGradient() {
   document.body.style.background = `linear-gradient(to right, ${start}, ${end})`;
 }
 
-// Initial background
-setRandomGradient();
+// Wait for DOM ready before setting background
+document.addEventListener("DOMContentLoaded", () => {
+  setRandomGradient();
+});
