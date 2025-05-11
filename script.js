@@ -79,3 +79,4 @@ function setRandomGradient() {
   const pair = colors[Math.floor(Math.random() * colors.length)];
   document.body.style.background = `linear-gradient(135deg, ${pair[0]}, ${pair[1]})`;
 }
+
