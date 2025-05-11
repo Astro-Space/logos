@@ -51,4 +51,4 @@ function showVerseOfTheDay() {
 window.onload = function() {
   randomGradient();
   showVerseOfTheDay();
-};
+}; 
