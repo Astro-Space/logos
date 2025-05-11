@@ -27,6 +27,7 @@ function displayVerse(bookArr) {
   document.getElementById("ref").textContent = v.ref;
   document.getElementById("verse-content").style.display = "block";
   document.getElementById("book-select").style.display = "none"; // Hide buttons after selection
+  document.getElementById("header").textContent = "Verse of the Day"; // Keep this header static
   setRandomGradient();
 }
 
