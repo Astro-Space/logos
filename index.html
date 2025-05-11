@@ -24,9 +24,17 @@
             border-radius: 1rem;
             background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .verse-text, .reference {
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s ease-out forwards;
+        }
+        .verse-text {
+            animation-delay: 0.2s;
+        }
+        .reference {
+            animation-delay: 0.6s;
         }
         @keyframes fadeInUp {
             to {
@@ -34,15 +42,11 @@
                 transform: translateY(0);
             }
         }
-        .reference {
-            margin-top: 1rem;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="verse-box">
-        <div id="verse-text"></div>
+        <div class="verse-text" id="verse-text"></div>
         <div class="reference" id="verse-ref"></div>
     </div>
 
