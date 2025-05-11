@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Verse of the Day</title>
   <style>
     html, body {
@@ -53,9 +53,10 @@
 <body>
   <div id="container">
     <div id="book-select">
-      <p>Select a book:</p>
+      <p>Select a source:</p>
       <button onclick="loadVerse('john')">John</button>
       <button onclick="loadVerse('matthew')">Matthew</button>
+      <button onclick="loadVerseOfTheDay()">Verse of the Day</button>
     </div>
     <div id="verse-content" style="display:none;">
       <div id="verse">Loading...</div>
@@ -65,4 +66,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
