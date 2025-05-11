@@ -5,15 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Verse of the Day</title>
   <style>
+    /* Your existing CSS styles for the page (with gradient functionality) */
     html, body {
       margin: 0;
       height: 100%;
+    }
+    body {
       font-family: sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
       background: #f4f4f4;
+      transition: background 0.5s ease;
     }
     #container {
       max-width: 600px;
@@ -45,16 +49,8 @@
     #book-select button:hover {
       background: #555;
     }
-    #verse-of-the-day {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #333;
-      font-weight: bold;
-    }
     .gradient-background {
-      background: linear-gradient(45deg, #FF6F61, #6F61FF);
-      transition: background 1s ease;
-      height: 100%;
+      background: linear-gradient(45deg, #ff7e5f, #feb47b);
     }
   </style>
 </head>
@@ -74,4 +70,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-  
