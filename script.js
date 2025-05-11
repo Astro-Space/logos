@@ -1,82 +1,46 @@
-const john = [
-  { verse: "In the beginning was the Word, and the Word was with God, and the Word was God.", ref: "John 1:1" },
-  { verse: "For God so loved the world that he gave his one and only Son...", ref: "John 3:16" },
-  { verse: "I am the way and the truth and the life. No one comes to the Father except through me.", ref: "John 14:6" }
-  // Add more verses as needed
-];
+// Array of verses for John and Matthew
+const verses = {
+  john: [
+    { verse: "John 1:1", text: "In the beginning was the Word, and the Word was with God, and the Word was God." },
+    { verse: "John 3:16", text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
+    { verse: "John 8:12", text: "When Jesus spoke again to the people, he said, 'I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.'" }
+  ],
+  matthew: [
+    { verse: "Matthew 5:14", text: "You are the light of the world. A town built on a hill cannot be hidden." },
+    { verse: "Matthew 6:33", text: "But seek first his kingdom and his righteousness, and all these things will be given to you as well." },
+    { verse: "Matthew 7:7", text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you." }
+  ]
+};
 
-const matthew = [
-  { verse: "Blessed are the meek, for they will inherit the earth.", ref: "Matthew 5:5" },
-  { verse: "But seek first his kingdom and his righteousness...", ref: "Matthew 6:33" },
-  { verse: "Come to me, all you who are weary and burdened, and I will give you rest.", ref: "Matthew 11:28" }
-  // Add more verses as needed
-];
+// Select the initial "Verse of the Day"
+function loadVerseOfTheDay() {
+  const today = new Date();
+  const verseOfTheDay = today.getDate() % verses.john.length; // Cycle between available verses
+  document.getElementById("verse").textContent = verses.john[verseOfTheDay].text;
+  document.getElementById("ref").textContent = verses.john[verseOfTheDay].verse;
+}
 
-// Verse of the Day logic
+// Load a random verse from the selected book (John or Matthew)
+function loadVerse(book) {
+  const verseIndex = Math.floor(Math.random() * verses[book].length);
+  const selectedVerse = verses[book][verseIndex];
+
+  // Hide the book selection and show the verse
+  document.getElementById("book-select").style.display = 'none';
+  document.getElementById("verse-content").style.display = 'block';
+  document.getElementById("verse").textContent = selectedVerse.text;
+  document.getElementById("ref").textContent = selectedVerse.verse;
+
+  // Update the header to the selected book's title
+  document.getElementById("verse-of-the-day").textContent = `Verse from ${book.charAt(0).toUpperCase() + book.slice(1)}`;
+  
+  // Change the background gradient randomly on book selection
+  const colors = ['#FF6F61', '#61FF6F', '#6F61FF', '#FF61C1'];
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  document.body.style.background = `linear-gradient(45deg, ${randomColor}, #fff)`;
+}
+
+// On page load, load the verse of the day
 window.onload = function() {
   loadVerseOfTheDay();
-}
-
-function loadVerseOfTheDay() {
-  const verseOfTheDay = getVerseOfTheDay();
-  document.getElementById("verse").textContent = `"${verseOfTheDay.verse}"`;
-  document.getElementById("ref").textContent = verseOfTheDay.ref;
-  document.getElementById("verse-content").style.display = "block";
-}
-
-function getVerseOfTheDay() {
-  // You can decide on the logic to pull a verse here, could be random or based on date
-  const verses = [
-    { verse: "This is the verse of the day, start your journey.", ref: "John 1:1" }
-  ];
-  return verses[0]; // For now, just one verse will be shown on the load
-}
-
-function loadVerse(book) {
-  document.getElementById("header").textContent = ""; // Clear the Verse of the Day header once a book is selected
-  document.getElementById("verse-content").style.display = "none"; // Hide verse content until a book is selected
-  document.getElementById("book-select").style.display = "none"; // Hide buttons after selection
-  if (book === "john") {
-    displayVerse(john);
-  } else if (book === "matthew") {
-    displayVerse(matthew);
-  }
-}
-
-function displayVerse(bookArr) {
-  const index = getVerseIndex(bookArr);
-  const v = bookArr[index];
-  document.getElementById("verse").textContent = `"${v.verse}"`;
-  document.getElementById("ref").textContent = v.ref;
-  document.getElementById("verse-content").style.display = "block";
-  setRandomGradient();
-}
-
-function getVerseIndex(arr) {
-  // Logic for verse of the day with different time slots
-  const now = new Date();
-  const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
-  const hour = now.getHours();
-  let slot = 0;
-
-  if (hour >= 12 && hour < 17) slot = 1;
-  else if (hour >= 17) slot = 2;
-
-  const seed = date + slot; // Create unique seed for the day + time slot
-  const hash = [...seed].reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return hash % arr.length; // Cycle through the verses
-}
-
-function setRandomGradient() {
-  const colors = [
-    ['#ff9a9e', '#fad0c4'],
-    ['#a18cd1', '#fbc2eb'],
-    ['#f6d365', '#fda085'],
-    ['#84fab0', '#8fd3f4'],
-    ['#a1c4fd', '#c2e9fb'],
-    ['#ffecd2', '#fcb69f']
-  ];
-  const pair = colors[Math.floor(Math.random() * colors.length)];
-  document.body.style.background = `linear-gradient(135deg, ${pair[0]}, ${pair[1]})`;
-}
-
+};
